@@ -12,7 +12,6 @@ struct flags
     unsigned int n;
     int bonus;
     unsigned int dc;
-    unsigned int count;
 };
 
 void parse_roll(char* die, Flags * flags)
@@ -76,14 +75,15 @@ void parse(int argc, char** argv)
     flags->n = 0;
     flags->bonus = 0;
     flags->dc = 0;
-    flags->count = 0;
 
-    for (int ii = 1; ii < argc; ++ii)
+    parse_roll(argv[1], flags);
+
+    for (int ii = 2; ii < argc; ++ii)
     {
-        if (strcmp(argv[ii], "roll") == 0)          parse_roll(argv[++ii], flags);
-        else if (argv[ii][0] == '+')                flags->bonus = atoi(argv[ii]+1);
-        else if (strstr(argv[ii], "-dc=") != NULL)  parse_dc(argv[ii], flags);
-        else if (strstr(argv[ii], "-c") != NULL)    flags->count = 1;        
+        // if (strcmp(argv[ii], "roll") == 0)          parse_roll(argv[++ii], flags);
+        if (argv[ii][0] == '+')                flags->bonus += atoi(argv[ii]+1);
+        else if (argv[ii][0] == '-')                flags->bonus -= atoi(argv[ii]+1);
+        else if (strstr(argv[ii], "dc=") != NULL)   parse_dc(argv[ii], flags);
     }
 
     rolls = roll(flags->n, flags->d, flags->bonus);
@@ -96,13 +96,13 @@ void parse(int argc, char** argv)
         printf("%i, ", rolls[ii]);
     }
 
-    if (flags->count)
+    if (flags->dc)
     {
-        printf("%i] - %i\n", rolls[rolls[0]], count(rolls));
+        printf("%i] - %i\n", rolls[rolls[0]], rolls[0]);
     }
     else
     {
-        printf("%i] - %i\n", rolls[rolls[0]], rolls[0]);
+        printf("%i] - %i\n", rolls[rolls[0]], count(rolls));
     }
 
     free(rolls);
