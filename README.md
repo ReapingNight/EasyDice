@@ -13,8 +13,8 @@ Compile the given C-code using:
 ## Usage
 Navigate to the folder where the program is downloaded.
 In the command line, type:
-`easy roll [number]d[type] [{+|-}{bonus}] [dc={filter}]`
-example: `easy roll 5d20 +5 dc=15`
+`roll [number]d[type] [{+|-}{bonus}] [dc={filter}]`
+example: `roll 5d20 +5 dc=15`
 - `[number]` number of dice to roll
 - `[type]` number of faces a single die has
 - `[{+|-}{bonus}]` a bonus applied once per roll
