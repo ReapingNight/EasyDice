@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <regex.h>
 
 struct flags
 {
@@ -14,13 +15,15 @@ struct flags
     unsigned int dc;
 };
 
-void parse_roll(char* die, Flags * flags)
+void parse_roll(char* dice, Flags * flags)
 {
+    regex_t dice;
+
     const char d[2] = "d";
     char* next_token;
     char** tokens = calloc(2, sizeof(char*));
 
-    tokens[0] = strtok_s(die, d, &next_token);
+    tokens[0] = strtok_s(dice, d, &next_token);
     if (tokens[0] != NULL) tokens[1] = strtok_s(NULL, d, &next_token);
 
     if (tokens[1] != NULL)
@@ -35,6 +38,7 @@ void parse_roll(char* die, Flags * flags)
     }
 
     free(tokens);
+    regfree(&dice);
 
     return;
 }
@@ -81,7 +85,7 @@ void parse(int argc, char** argv)
     for (int ii = 2; ii < argc; ++ii)
     {
         // if (strcmp(argv[ii], "roll") == 0)          parse_roll(argv[++ii], flags);
-        if (argv[ii][0] == '+')                flags->bonus += atoi(argv[ii]+1);
+        if (argv[ii][0] == '+')                     flags->bonus += atoi(argv[ii]+1);
         else if (argv[ii][0] == '-')                flags->bonus -= atoi(argv[ii]+1);
         else if (strstr(argv[ii], "dc=") != NULL)   parse_dc(argv[ii], flags);
     }
