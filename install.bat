@@ -1,0 +1,1 @@
+cl /W4 argsparcer.c easydice.c filter.c re.c roller.c /link /out:roll.exe
