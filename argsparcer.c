@@ -5,19 +5,34 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <regex.h>
+#include <tiny-regex-c.h>
 
 struct flags
 {
     unsigned int d;
     unsigned int n;
     int bonus;
+    int flat;
     unsigned int dc;
 };
 
+int match(const char* string, const char* pattern) 
+{
+    regex_t re;
+    if (regcomp(&re, pattern, REG_EXTENDED|REG_NOSUB) != 0) return 0;
+    int status = regexec(&re, string, 0, NULL, 0);
+    regfree(&re);
+    if (status != 0) return 0;
+    return 1;
+}
+
 void parse_roll(char* dice, Flags * flags)
 {
-    regex_t dice;
+    const char* bonus = "[0-9]*d[0-9]+\+[0-9]+";
+    const char* numDice = "[0-9]+d[0-9]+";
+
+    printf("%s matches on %s: %s\n", dice, bonus, match(dice, bonus) ? "true" : "false");
+    printf("%s matches on %s: %s\n", dice, numDice, match(dice, numDice) ? "true" : "false");
 
     const char d[2] = "d";
     char* next_token;
@@ -38,7 +53,6 @@ void parse_roll(char* dice, Flags * flags)
     }
 
     free(tokens);
-    regfree(&dice);
 
     return;
 }
@@ -78,6 +92,7 @@ void parse(int argc, char** argv)
     flags->d = 0;
     flags->n = 0;
     flags->bonus = 0;
+    flags->flat = 0;
     flags->dc = 0;
 
     parse_roll(argv[1], flags);
