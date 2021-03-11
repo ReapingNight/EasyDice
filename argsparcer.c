@@ -1,7 +1,7 @@
 #include "argsparser.h"
 #include "roller.h"
 #include "filter.h"
-#include "re.h"
+// #include "re.h"
 
 #include <stdio.h>
 #include <string.h>
@@ -18,53 +18,57 @@ struct flags
 
 void parse_roll(char* dice, Flags * flags)
 {
-    // Match valid roll syntax
-    int match;
-    int temp;
-    re_t re_val = re_compile("[0-9]*[d]?[0-9]+[\\+]?[0-9]*");
+    // // Match valid roll syntax
+    // int match;
+    // int temp;
+    // re_t re_val = re_compile("[0-9]*[d]?[0-9]+[\\+]?[0-9]*");
 
-    if (temp = re_matchp(re_val, dice, &match) == -1 || match != strlen(dice))
-    {
-        printf("%i - %i\n", temp, match);
-        printf("Invalid syntax %s\n", dice);
-    }
+    // if (temp = re_matchp(re_val, dice, &match) == -1 || match != strlen(dice))
+    // {
+    //     printf("%i - %i\n", temp, match);
+    //     printf("Invalid syntax %s\n", dice);
+    // }
 
 
-    // Determine whether flat is given
-    re_t re_flat = re_compile("[0-9]*d[0-9]+\\+[0-9]+");
+    // // Determine whether flat is given
+    // re_t re_flat = re_compile("[0-9]*d[0-9]+\\+[0-9]+");
 
-    if (re_matchp(re_flat, dice, &match) != -1)
-    {
-        // Split flat from string
-        printf("Match on flat\n");
-    }
+    // if (re_matchp(re_flat, dice, &match) != -1)
+    // {
+    //     // Split flat from string
+    //     printf("Match on flat\n");
+    // }
     
 
-    // Determine whether n is given
-    re_t re_n = re_compile("[0-9]+d[0-9]+");
+    // // Determine whether n is given
+    // re_t re_n = re_compile("[0-9]+d[0-9]+");
 
-    if (re_matchp(re_n, dice, &match) != -1)
-    {
-        // Split n from string
-        printf("Match on n\n");
-    }
+    // if (re_matchp(re_n, dice, &match) != -1)
+    // {
+    //     // Split n from string
+    //     printf("Match on n\n");
+    // }
     
 
-    // Split whether dice or regular number
-    re_t re_dice = re_compile("d");
+    // // Split whether dice or regular number
+    // re_t re_dice = re_compile("d");
 
-    if (re_matchp(re_dice, dice, &match) != -1)
-    {
-        // Split d from string
-        printf("Match dice\n");
-    }
+    // if (re_matchp(re_dice, dice, &match) != -1)
+    // {
+    //     // Split d from string
+    //     printf("Match dice\n");
+    // }
 
     const char d[2] = "d";
     char* next_token;
     char** tokens = calloc(2, sizeof(char*));
 
-    tokens[0] = strtok_s(dice, d, &next_token);
-    if (tokens[0] != NULL) tokens[1] = strtok_s(NULL, d, &next_token);
+    // tokens[0] = strtok_s(dice, d, &next_token);
+    // if (tokens[0] != NULL) tokens[1] = strtok_s(NULL, d, &next_token);
+
+    tokens[0] = strtok(dice, d);
+    if (tokens[0] != NULL) tokens[1] = strtok(NULL, d);
+
 
     if (tokens[1] != NULL)
     {
@@ -88,8 +92,11 @@ void parse_dc(char* dc, Flags * flags)
     char* next_token;
     char** tokens = calloc(2, sizeof(char*));
 
-    tokens[0] = strtok_s(dc, d, &next_token);
-    if (tokens[0] != NULL) tokens[1] = strtok_s(NULL, d, &next_token);
+    // tokens[0] = strtok_s(dc, d, &next_token);
+    // if (tokens[0] != NULL) tokens[1] = strtok_s(NULL, d, &next_token);
+
+    tokens[0] = strtok(dc, d);
+    if (tokens[0] != NULL) tokens[1] = strtok(NULL, d);
 
     if (tokens[1] != NULL) flags->dc = atoi(tokens[1]);
 
